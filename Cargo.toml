@@ -1,0 +1,22 @@
+[package]
+name = "xlsx-csv"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+name = "xlsx_csv"
+# "cdylib" is necessary to produce a shared library for Python to import from.
+#
+# Downstream Rust code (including code in `bin/`, `examples/`, and `tests/`) will not be able
+# to `use string_sum;` unless the "rlib" or "lib" crate type is also included, e.g.:
+# crate-type = ["cdylib", "rlib"]
+crate-type = ["cdylib"]
+
+[dependencies]
+calamine = { version = "0.18.0", features = ["dates"] }
+
+[dependencies.pyo3]
+version = "0.14.1"
+features = ["extension-module"]
