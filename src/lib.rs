@@ -19,17 +19,10 @@ fn write_range<W: Write>(dest: &mut W, range: &Range<DataType>) -> std::io::Resu
                         write!(dest, "{}", s)
                     }
                 }
-                DataType::Float(ref f) => {
-                    let mantissa = f.floor();
-                    if mantissa == *f {
-                        write!(dest, "{}", f)
-                    } else {
-                        write!(dest, "{:.2}", f)
-                    }
-                }
+                DataType::Float(ref f) => write!(dest, "{}", f),
                 DataType::DateTime(_) => {
-                    let date = c.as_date().unwrap();
-                    write!(dest, "{}", date.format("%m-%d-%Y"))
+                    let date = c.as_datetime().unwrap();
+                    write!(dest, "{}", date.format("%Y-%m-%d %H:%M:%S"))
                 }
                 DataType::Int(ref i) => write!(dest, "{}", i),
                 DataType::Error(ref e) => write!(dest, "{:?}", e),
@@ -69,6 +62,5 @@ fn xlsx2csv(file: &str, sheet: &str) -> PyResult<bool> {
 #[pymodule]
 fn xlsx_csv(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(xlsx2csv, m)?)?;
-
     Ok(())
 }
