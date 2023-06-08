@@ -37,12 +37,13 @@ fn write_range<W: Write>(dest: &mut W, range: &Range<DataType>) -> std::io::Resu
     Ok(())
 }
 
-/// Formats the sum of two numbers as string.
+// converts first argument into a csv (same name, silently overrides if the file already exists)
+// second argument is the sheet name
+// returns true if successful
+// panics if the first argument is not an excel file
+// panics if the second argument is not a sheet name or does not exist
 #[pyfunction]
 fn xlsx2csv(file: &str, sheet: &str) -> PyResult<bool> {
-    // converts first argument into a csv (same name, silently overrides
-    // if the file already exists
-
     let src = PathBuf::from(file);
     match src.extension().and_then(|s| s.to_str()) {
         Some("xlsx") | Some("xlsm") | Some("xlsb") | Some("xls") => (),
